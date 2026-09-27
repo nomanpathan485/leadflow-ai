@@ -1,0 +1,16 @@
+# Python environment and cache
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Local database and customer information
+*.db
+*.db-*
+*.sqlite
+*.sqlite3

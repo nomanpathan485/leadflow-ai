@@ -1,56 +1,53 @@
-import sqlite3
-from contextlib import closing
-from pathlib import Path
+from sqlalchemy import select, update
 
-# Keep the database beside this Python file.
-DB_PATH = Path(__file__).resolve().parent / "leads.db"
+from db_connection import SessionLocal
+from models import Lead
 
 
-def init_db():
-    with closing(sqlite3.connect(DB_PATH)) as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS leads (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL,
-                course TEXT NOT NULL,
-                message TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'New',
-                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        conn.commit()
-
-
-def save_lead(name, email, course, message):
-    with closing(sqlite3.connect(DB_PATH)) as conn:
-        cursor = conn.execute(
-            """
-            INSERT INTO leads (name, email, course, message)
-            VALUES (?, ?, ?, ?)
-            """,
-            (name, email, course, message),
+def save_lead(name: str, email: str, course: str, message: str) -> int:
+    with SessionLocal.begin() as session:
+        lead = Lead(
+            name=name,
+            email=email,
+            course=course,
+            message=message,
         )
-        conn.commit()
-        return cursor.lastrowid
+
+        session.add(lead)
+        session.flush()
+        lead_id = lead.id
+
+    return lead_id
 
 
-def get_leads():
-    with closing(sqlite3.connect(DB_PATH)) as conn:
-        conn.row_factory = sqlite3.Row
+def get_leads() -> list[dict]:
+    with SessionLocal() as session:
+        leads = session.scalars(
+            select(Lead).order_by(Lead.id.desc())
+        ).all()
 
-        rows = conn.execute(
-            "SELECT * FROM leads ORDER BY id DESC"
-        ).fetchall()
+        return [
+            {
+                "id": lead.id,
+                "name": lead.name,
+                "email": lead.email,
+                "course": lead.course,
+                "message": lead.message,
+                "status": lead.status,
+                "created_at": lead.created_at,
+            }
+            for lead in leads
+        ]
 
-        return [dict(row) for row in rows]
 
-def update_lead_status(lead_id: int, status: str):
-    with closing(sqlite3.connect(DB_PATH)) as conn:
-        cursor = conn.execute(
-            "UPDATE leads SET status = ? WHERE id = ?",
-            (status, lead_id),
+def update_lead_status(lead_id: int, status: str) -> bool:
+    with SessionLocal.begin() as session:
+        result = session.execute(
+            update(Lead)
+            .where(Lead.id == lead_id)
+            .values(status=status)
         )
-        conn.commit()
 
-        return cursor.rowcount > 0
+        found = result.rowcount > 0
+
+    return found

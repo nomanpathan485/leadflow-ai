@@ -1,31 +1,9 @@
-from contextlib import asynccontextmanager
-from typing import Literal
+from database import save_lead, get_leads, update_lead_status
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from database import save_lead, get_leads, update_lead_status
+from schemas import LeadInput, LeadStatusUpdate
 
-from database import init_db, save_lead, get_leads, update_lead_status
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    init_db()
-    yield
-
-
-app = FastAPI(title="LeadFlow AI", lifespan=lifespan)
-
-
-class LeadInput(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True)
-
-    name: str = Field(min_length=2, max_length=100)
-    email: EmailStr
-    course: str = Field(min_length=2, max_length=100)
-    message: str = Field(min_length=10, max_length=2000)
-
-class LeadStatusUpdate(BaseModel):
-    status: Literal["New", "Contacted", "Booked", "Closed"]
-
+app = FastAPI(title="LeadFlow AI")
 
 @app.get("/")
 def home():

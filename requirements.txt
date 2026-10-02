@@ -1,1 +1,5 @@
 fastapi[standard]
+SQLAlchemy
+psycopg[binary]
+alembic
+pydantic-settings

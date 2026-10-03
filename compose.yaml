@@ -28,6 +28,19 @@ services:
       N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
     volumes:
       - n8n_data:/home/node/.n8n
+      
+  api:
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      APP_NAME: LeadFlow AI
+      DATABASE_URL: "postgresql+psycopg://leadflow:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/leadflow"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:

@@ -1,7 +1,7 @@
 from sqlalchemy import select, update
 
-from db_connection import SessionLocal
-from models import Lead
+from app.db.connection import SessionLocal
+from app.db.models import Lead
 
 
 def save_lead(name: str, email: str, course: str, message: str) -> int:

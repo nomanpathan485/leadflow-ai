@@ -1,7 +1,6 @@
-from database import save_lead, get_leads, update_lead_status
+from app.db.repository import save_lead, get_leads, update_lead_status
 from fastapi import FastAPI, HTTPException
-from database import save_lead, get_leads, update_lead_status
-from schemas import LeadInput, LeadStatusUpdate
+from app.schemas import LeadInput, LeadStatusUpdate
 
 app = FastAPI(title="LeadFlow AI")
 

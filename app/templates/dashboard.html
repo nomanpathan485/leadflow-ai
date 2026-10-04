@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enquiries | LeadFlow</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=5">
+  <script src="/static/js/dashboard.js?v=3" defer></script>
+</head>
+<body>
+  <main class="dashboard">
+    <header class="dashboard-header">
+      <div>
+        <span class="brand">LeadFlow</span>
+        <h1>Your enquiries</h1>
+        <p class="intro">Track conversations from first enquiry to booking.</p>
+      </div>
+      <a href="/enquiry">Open enquiry form</a>
+    </header>
+
+    <div class="toolbar">
+      <label for="status-filter">Filter by status</label>
+      <select id="status-filter">
+        <option value="">All statuses</option>
+        <option>New</option>
+        <option>Contacted</option>
+        <option>Booked</option>
+        <option>Closed</option>
+      </select>
+      <button id="refresh-button" type="button">Refresh</button>
+    </div>
+
+    <p id="dashboard-feedback" role="status" aria-live="polite"></p>
+    <p id="lead-count"></p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Reference</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Course</th>
+            <th scope="col">Message</th>
+            <th scope="col">Received</th>
+            <th scope="col">Status</th>
+            <th scope="col">AI insights</th>
+          </tr>
+        </thead>
+        <tbody id="leads-body"></tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

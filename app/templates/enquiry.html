@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Course enquiry | LeadFlow</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=4">
+  <script src="/static/js/enquiry.js?v=3" defer></script>
+</head>
+<body>
+  <main class="card">
+    <span class="brand">LeadFlow</span>
+    <h1>Your next skill starts here.</h1>
+    <p class="intro">
+      Tell us what you want to learn. Our team will respond to your enquiry.
+    </p>
+
+    <form id="enquiry-form">
+      <label for="name">Full name</label>
+      <input id="name" name="name" autocomplete="name"
+             minlength="2" maxlength="100" required>
+
+      <label for="preferred_contact">How should we contact you?</label>
+        <select id="preferred_contact" name="preferred_contact" required>
+        <option value="whatsapp" selected>WhatsApp</option>
+        <option value="phone">Phone call</option>
+        <option value="email">Email</option>
+        </select>
+
+        <div id="phone-fields">
+        <label for="phone">Phone number with country code</label>
+        <input
+            id="phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            placeholder="+919876543210"
+            pattern="\+[1-9][0-9]{7,14}"
+            maxlength="16"
+            aria-describedby="phone-help"
+            required
+        >
+        <p id="phone-help" class="hint">
+            Include the country code, such as +91 or +971. Use digits without spaces.
+        </p>
+        </div>
+
+        <label for="email">Email <span id="email-optional">(optional)</span></label>
+        <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        >
+
+        <div id="whatsapp-permission">
+        <label class="checkbox-label" for="whatsapp_consent">
+            <input
+            id="whatsapp_consent"
+            name="whatsapp_consent"
+            type="checkbox"
+            required
+            >
+            <span>
+            I agree to receive WhatsApp responses about this enquiry.
+            </span>
+        </label>
+        </div>
+
+      <label for="course">Course of interest</label>
+      <select id="course" name="course" required>
+        <option value="">Choose a course</option>
+
+        <optgroup label="Programming">
+            <option>Python</option>
+            <option>Java</option>
+            <option>C</option>
+            <option>C++</option>
+            <option>JavaScript</option>
+            <option>TypeScript</option>
+            <option>R Programming</option>
+            <option>Data Structures and Algorithms</option>
+        </optgroup>
+
+        <optgroup label="Artificial Intelligence">
+            <option>Artificial Intelligence Fundamentals</option>
+            <option>Machine Learning</option>
+            <option>Deep Learning</option>
+            <option>Natural Language Processing</option>
+            <option>Computer Vision</option>
+            <option>Generative AI and Large Language Models</option>
+            <option>Prompt Engineering</option>
+            <option>RAG and AI Agents</option>
+            <option>AI Automation</option>
+            <option>MLOps and AI Deployment</option>
+        </optgroup>
+
+        <optgroup label="Data and Analytics">
+            <option>Data Science</option>
+            <option>Data Analytics</option>
+            <option>SQL and Databases</option>
+            <option>Excel</option>
+            <option>Power BI</option>
+            <option>Tableau</option>
+            <option>Statistics for Data Science</option>
+            <option>Data Engineering and Big Data</option>
+        </optgroup>
+
+        <optgroup label="Software and Cloud">
+            <option>Web Development</option>
+            <option>Full Stack Development</option>
+            <option>Backend Development and APIs</option>
+            <option>Cloud Computing</option>
+            <option>Docker and DevOps</option>
+            <option>Cybersecurity Fundamentals</option>
+        </optgroup>
+
+        <option value="Other / Need guidance">Other / Help me choose</option>
+        </select>
+
+      <label for="message">What would you like to know?</label>
+      <textarea id="message" name="message" rows="5"
+                minlength="10" maxlength="2000"
+                placeholder="Tell us your questions, preferred start date and contact time."
+                required></textarea>
+
+      <p class="hint">
+        We’ll use these details to respond to this enquiry.
+      </p>
+
+      <button type="submit" id="submit-button">Send enquiry</button>
+      <p id="form-feedback" role="status" aria-live="polite"></p>
+    </form>
+    <section id="thank-you" hidden aria-labelledby="thank-you-title">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <h2 id="thank-you-title" tabindex="-1">Thanks for your enquiry!</h2>
+    <p id="thank-you-message"></p>
+    <p>
+    Our team will review your enquiry and respond using your preferred
+    contact method.
+    </p>
+    <p id="enquiry-reference" class="hint"></p>
+    <button type="button" id="another-enquiry">
+        Submit another enquiry
+    </button>
+    </section>
+  </main>
+</body>
+</html>

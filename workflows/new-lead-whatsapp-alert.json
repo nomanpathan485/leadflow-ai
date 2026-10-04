@@ -1,0 +1,88 @@
+{
+  "name": "leadflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "leadflow-new-enquiry",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9c047754-c59e-47d7-8b37-9d1510c2def2",
+      "name": "Webhook",
+      "webhookId": "99cb74e5-b8f0-468b-ac7b-62e7c21c7673"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'http://api:8000/leads/' + $json.body.lead_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "3d6b88dd-07d2-43c2-bef9-71ebafaf88ea",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "REPLACE_WITH_META_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "REPLACE_WITH_OWNER_PHONE_NUMBER",
+        "textBody": "={{ 'New LeadFlow enquiry #' + $json.id\n+ '\\n\\nName: ' + $json.name\n+ '\\nCourse: ' + $json.course\n+ '\\nPreferred contact: ' + $json.preferred_contact\n+ '\\nPhone: ' + ($json.phone || 'Not provided')\n+ '\\nEmail: ' + ($json.email || 'Not provided')\n+ '\\n\\nMessage: ' + $json.message\n+ '\\n\\nOpen the LeadFlow dashboard on your laptop to follow up.' }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e96e8ef2-728a-476d-88d2-c4d5c1f32f4d",
+      "name": "Send message",
+      "webhookId": "e9f40b7c-a296-41b7-bc1e-6980864fe608"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  
+  "nodeGroups": [],
+  "tags": []
+}

@@ -38,9 +38,31 @@ services:
     environment:
       APP_NAME: LeadFlow AI
       DATABASE_URL: "postgresql+psycopg://leadflow:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/leadflow"
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-qwen/qwen3.8-27b}
+      N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL:?Set N8N_WEBHOOK_URL in .env}
+      N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:?Set N8N_WEBHOOK_SECRET in .env}
     depends_on:
       postgres:
         condition: service_healthy
+        
+  worker:
+    build:
+      context: .
+    restart: unless-stopped
+    command: ["python", "-m", "app.worker"]
+    environment:
+      PYTHONUNBUFFERED: "1"
+      DATABASE_URL: "postgresql+psycopg://leadflow:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/leadflow"
+      N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL:?Set N8N_WEBHOOK_URL in .env}
+      N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:?Set N8N_WEBHOOK_SECRET in .env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_started
+      n8n:
+        condition: service_started
 
 volumes:
   postgres_data:
